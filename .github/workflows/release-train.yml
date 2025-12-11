@@ -1,0 +1,52 @@
+name: Release Train
+
+on:
+  # Opinionated cadence: merge the Release PR weekly.
+  schedule:
+    - cron: "0 17 * * 3" # Wednesdays 17:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: release-train-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge-release-pr:
+    name: Auto-merge release-please PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Find open release-please PR
+        id: find
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=$(gh pr list \
+            --state open \
+            --label "autorelease: pending" \
+            --json number \
+            --jq '.[0].number')
+
+          if [ -z "$PR_NUMBER" ]; then
+            echo "No open Release Please PR."
+            exit 0
+          fi
+
+          echo "Found Release Please PR #$PR_NUMBER"
+          echo "pr=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Enable auto-merge (squash)
+        if: steps.find.outputs.pr != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge "${{ steps.find.outputs.pr }}" \
+            --squash \
+            --auto \
+            --delete-branch
+

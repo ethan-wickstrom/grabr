@@ -36,9 +36,10 @@
     "build:js": "bun build --target=bun --format=esm --outdir=dist --packages=external --sourcemap=external ./src/index.ts ./src/aigrab.ts",
     "build:types": "bunx tsc -p tsconfig.build.json",
     "build": "bun run clean && bun run build:js && bun run build:types",
+    "verify": "bun run ./scripts/verify.ts",
     "test": "bun test",
     "demo": "bun --hot ./examples/demo.ts",
-    "prepack": "bun test && bun run build"
+    "prepack": "bun run verify"
   },
   "dependencies": {
     "bippy": "^0.5.25"

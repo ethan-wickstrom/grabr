@@ -46,3 +46,9 @@ bun run demo
 ```bash
 bun run build
 ```
+
+## Releasing
+
+Releases are fully automated via Release Please + a weekly release train.
+
+See `RELEASING.md` for the opinionated workflow, required secrets, and cadence.
