@@ -19,15 +19,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v5
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "latest"
+          bun-version-file: ".bun-version"
 
-      - name: Install dependencies (frozen lockfile)
-        run: bun install --frozen-lockfile
+      - name: Install dependencies (bun ci)
+        run: bun ci
 
       - name: Verify (test + build + pack dry-run)
         run: bun run verify

@@ -15,6 +15,7 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write
   pull-requests: write
 
 jobs:
@@ -33,4 +34,3 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           release-type: node
           package-name: aigrab
-

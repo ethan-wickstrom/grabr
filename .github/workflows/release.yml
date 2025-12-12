@@ -20,14 +20,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: "latest"
+          bun-version-file: ".bun-version"
 
       - name: Validate tag matches package.json version
         if: startsWith(github.ref, 'refs/tags/')
@@ -51,8 +51,8 @@ jobs:
             console.log(`OK: tag ${tag} matches package.json version ${pkgVersion}`);
           '
 
-      - name: Install dependencies (frozen lockfile)
-        run: bun install --frozen-lockfile
+      - name: Install dependencies (bun ci)
+        run: bun ci
 
       - name: Verify (test + build + pack dry-run)
         run: bun run verify
@@ -68,7 +68,8 @@ jobs:
           NPMRC_PATH="${RUNNER_TEMP}/.npmrc"
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > "${NPMRC_PATH}"
           echo "NPM_CONFIG_USERCONFIG=${NPMRC_PATH}" >> "${GITHUB_ENV}"
-          # Bun uses BUN_AUTH_TOKEN in some contexts; set both.
+          # Bun respects NPM_CONFIG_TOKEN; also set Bun/Node tokens for compatibility.
+          echo "NPM_CONFIG_TOKEN=${NPM_TOKEN}" >> "${GITHUB_ENV}"
           echo "BUN_AUTH_TOKEN=${NPM_TOKEN}" >> "${GITHUB_ENV}"
           echo "NODE_AUTH_TOKEN=${NPM_TOKEN}" >> "${GITHUB_ENV}"
 
@@ -76,7 +77,7 @@ jobs:
         run: bun pm whoami
 
       - name: Publish to npm
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          bun publish --ignore-scripts --no-save
+          # Prefer Bun-native publishing. If Bun has a transient auth issue on CI,
+          # fall back to npm CLI to keep releases unblocked.
+          bun publish --ignore-scripts --no-save || bunx npm publish --ignore-scripts

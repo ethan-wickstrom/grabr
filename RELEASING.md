@@ -24,6 +24,12 @@ Add these repository secrets:
    - Needed because PRs/tags created by the default `GITHUB_TOKEN` **do not trigger other workflows**.
    - Used by `.github/workflows/release-please.yml`.
 
+Pin a Bun version for reproducible CI/local dev:
+
+3. `.bun-version`
+   - This file is the **single source of truth** for the Bun version used locally and in CI.
+   - CI reads it via `oven-sh/setup-bun`’s `bun-version-file`.
+
 ## Release cadence
 
 - **Weekly release train:** every **Wednesday at 17:00 UTC**.
@@ -84,4 +90,3 @@ Add these repository secrets:
 
 - The `prepack` script (`bun test && bun run build`) ensures local publish sanity.
 - If CI fails, fix forward with another PR; the Release PR will update automatically.
-
