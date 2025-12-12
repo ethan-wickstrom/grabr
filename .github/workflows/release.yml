@@ -76,7 +76,7 @@ jobs:
         run: bun pm whoami
 
       - name: Publish to npm
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          # Prefer Bun-native publishing. If Bun has a transient auth issue on CI,
-          # fall back to npm CLI to keep releases unblocked.
-          bun publish --ignore-scripts --no-save || bunx npm publish --ignore-scripts
+          bun publish --ignore-scripts --no-save
