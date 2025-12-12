@@ -1,5 +1,5 @@
 {
-  "name": "grabr",
+  "name": "@ethan-wickstrom/grabr",
   "version": "1.0.0",
   "author": "Ethan Wickstrom",
   "description": "React element context extraction for AI coding agents.",
@@ -26,6 +26,9 @@
     "README.md",
     "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "keywords": [
     "ai",

@@ -80,4 +80,4 @@ jobs:
         run: |
           # Prefer Bun-native publishing. If Bun has a transient auth issue on CI,
           # fall back to npm CLI to keep releases unblocked.
-          bun publish --ignore-scripts --no-save || bunx npm publish --ignore-scripts
+          bun publish --access public --ignore-scripts --no-save || bunx npm publish --access public --ignore-scripts

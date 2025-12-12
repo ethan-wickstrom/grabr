@@ -5,7 +5,7 @@ React element context extraction for AI coding agents.
 ## Install
 
 ```bash
-bun add grabr
+bun add @ethan-wickstrom/grabr
 ```
 
 ## Usage (browser app)
@@ -16,7 +16,7 @@ bun add grabr
 
 ```ts
 import "bippy"; // installs DevTools hook before React
-import { initGrabr } from "grabr";
+import { initGrabr } from "@ethan-wickstrom/grabr";
 
 initGrabr(); // attaches overlay + sets window.grabr
 ```
